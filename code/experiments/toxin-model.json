@@ -1,0 +1,48 @@
+{
+    "comment" : "Toxin model parameter file example",
+    "entities": {
+        "DISABLED" : 0,
+        "TISSUE": 1,
+        "SEEKER" : 2,
+        "BACTERIA": 3,
+	    "TOXIN" : 4,
+        "KILLER" : 5
+    },
+    "parameters" : {
+        "BacteriaConsumptionRate" : 1,
+        "BacteriaConsumptionScale" : 1,
+        "BacteriaBirthRate" : 1,
+        "BacteriaBirthScale" : 1,
+        "BacteriaJumpRate" : 1,
+        "BacteriaJumpScale" : 1,
+        "SeekerJumpRate" : 1.0,
+        "SeekerJumpScale" : 10,
+        "KillerDetectionRate" : 1,
+        "KillerDetectionScale" : 3,
+        "KillerJumpRate" : 1.0,
+        "KillerJumpScale" : 1,
+        "KillerToSeekerRate" : 0.2,
+        "InhibitionRate" : 1,
+        "InhibitionScale" : 1,
+        "DisabledRecoveryRate" : 0.025,
+        "KillerConsumptionRate" : 1.75,
+        "KillerConsumptionScale" : 3,
+        "KillerActivationRate": 1,
+        "KillerActivationScale" : 1,
+        "InitialTissueDensity" : 1.5,
+        "InitialKillerDensity" : 0,
+        "InitialSeekerDensity" : 0.5,
+        "InitialDisabledDensity" : 0,
+        "InitialToxinDensity" : 0.0,
+        "BacteriaEntryRadius": 1,
+        "InitialBacteriaDensity": 0.01,
+        "ToxinDeathRate" : 1.0,
+        "ToxinSecretionRate" : 1.0,
+        "ToxinDiffusionRate" : 1.0,
+        "ToxinDiffusionScale" : 1.0
+    },
+    "simulator" : {
+        "domain" : 100,
+        "time" : 1000
+    }
+}

@@ -1,0 +1,14 @@
+{   
+ "combine" : {
+     "InitialBacteriaDensity" : [10.0],
+     "BacteriaEntryRadius" : [1]
+ },
+ "alternate" : [
+     { "ToxinDiffusionScale" : 1 },
+     { "ToxinDiffusionScale" : 2 },
+     { "ToxinDiffusionScale" : 4 },
+     { "ToxinDiffusionScale" : 8 },
+     { "ToxinDiffusionScale" : 16 },
+     { "ToxinDiffusionScale" : 32 }
+ ]
+}

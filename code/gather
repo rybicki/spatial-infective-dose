@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+import os
+import os.path
+import json
+import util
+import csv
+import itertools as it
+
+if len(sys.argv) < 3:
+    print "Usage: {} [root] [output csv]".format(sys.argv[0])
+    sys.exit(1)
+
+path = sys.argv[1]
+ofname = sys.argv[2]
+
+def get_replicates(dirname):
+    model = None
+    replicates = []
+    for fname in os.listdir(dirname):
+        d = "{}/{}".format(dirname, fname)
+        splitted = fname.split(".")
+        if splitted[-2] == 'density' and splitted[-1] == 'gz':
+            f = util.open_file(d)
+            reader = csv.DictReader(f, delimiter='\t')
+            replicate = []
+            for r in reader:
+                r["replicate.seed"] = fname.split(".")[0]
+                replicate.append(r)
+            replicates.append(replicate)
+        elif fname.split(".")[-1] == 'json':
+            model = json.load(open(d))
+        else:
+            print "Skipping unrecognized file '{}'".format(fname)
+    return model, replicates
+
+def get_sorted_replicates(entries):
+    return sorted(entries, key = lambda d : float(d["time"]))
+
+def analyse(entity_names, model, replicate):
+    entities = sorted([x for x in replicate[0].keys() if x not in ["time","events","replicate.seed","num.event","num.point"]])
+    fractions = sorted([0.25,0.75] + [0.1*i for i in range(11)])
+    entry = {}
+
+    # filter entities
+    entities = [e for e in entities if entity_names[int(e)] in ["bacteria", "tissue"]]
+    for e in entities:
+        name = entity_names[int(e)]
+        init = int(replicate[0][e])
+        entry["replicate.seed"] = replicate[0]["replicate.seed"]
+        entry["init.{}".format(name)] = init
+        entry["final.{}".format(name)] = int(replicate[-1][e])
+        entry["time"] = float(replicate[-1]["time"])
+
+        for f in fractions:
+            # check when entity e reaches fraction f*init 
+            T = "NA"
+            for l in replicate:
+                if int(l[e]) <= f*init:
+                    T = float(l["time"])
+                    break
+            entry["time.{}.at.{}".format(name,f)] = T
+    if "case" in model:
+        entry.update(model["case"])
+    return entry
+
+def get_name_mapping(model):
+    return { v : k.lower() for (k,v) in model["entities"].items() }
+
+def get_results(path):
+    print "Iterating through '{}'".format(path)
+    for fname in sorted(os.listdir(path)):
+        d = "{}/{}".format(path,fname)
+        if not os.path.isdir(d):
+            print "Skipping {}".format(d)
+            continue
+        model, data = get_replicates(d)
+        entity_names = get_name_mapping(model)
+        for replicate in data:
+            entry = analyse(entity_names, model, replicate)
+            entry["case.id"] = fname
+            yield entry
+        
+entries = get_results(path)
+first_entry = entries.next()
+headers = first_entry.keys()
+
+print "Writing summary to '{}'".format(ofname)
+writer = csv.DictWriter(open(ofname, 'w', buffering=1), fieldnames=sorted(first_entry.keys()))
+writer.writeheader()
+writer.writerow(first_entry)
+i = 1
+for e in entries:
+    writer.writerow(e)
+    i += 1
+    sys.stdout.write("{} lines processed and written\r".format(i))
+    sys.stdout.flush()
+sys.stdout.write("\nDone.")

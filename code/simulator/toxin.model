@@ -1,0 +1,77 @@
+/* Toxin model specification. */
+Model get_model(const json &input) {
+    auto e = input["entities"];
+    auto d = input["parameters"];
+    return Model()
+            + BirthByConsumption<Tophat>(e["BACTERIA"],  
+                                         e["TISSUE"], 
+                                         e["BACTERIA"], 
+                                         d["BacteriaConsumptionRate"], 
+                                         d["BacteriaConsumptionScale"])
+            + Jump<Tophat>(e["BACTERIA"], 
+                           d["BacteriaJumpRate"], 
+                           d["BacteriaJumpScale"])
+            + Jump<Tophat>(e["SEEKER"], 
+                           d["SeekerJumpRate"], 
+                           d["SeekerJumpScale"])
+            + Jump<Tophat>(e["TOXIN"], 
+                           d["ToxinDiffusionRate"], 
+                           d["ToxinDiffusionScale"])
+            + Jump<Tophat>(e["KILLER"], 
+                           d["KillerJumpRate"], 
+                           d["KillerJumpScale"])
+            + ChangeInType(e["DISABLED"], 
+                           e["SEEKER"], 
+                           d["DisabledRecoveryRate"])
+            + ChangeInType(e["KILLER"], 
+                           e["SEEKER"], 
+                           d["KillerToSeekerRate"])
+            + ChangeInTypeByFacilitation<Tophat>(e["SEEKER"],
+                                                e["BACTERIA"],
+                                                e["KILLER"],
+                                                d["KillerActivationRate"],
+                                                d["KillerActivationScale"]) 
+            + ChangeInTypeByConsumption<Tophat>(e["SEEKER"], 
+                                                 e["TOXIN"], 
+                                                 e["DISABLED"], 
+                                                 d["InhibitionRate"], 
+                                                 d["InhibitionScale"])
+            + Birth<Tophat>(e["BACTERIA"], 
+                            e["TOXIN"], 
+                            d["ToxinSecretionRate"], 
+                            d["ToxinDiffusionScale"])
+            + DensityIndependentDeath(e["TOXIN"], 
+                                      d["ToxinDeathRate"])
+            + Consume<Tophat>(e["KILLER"], 
+                              e["BACTERIA"], 
+                              d["KillerConsumptionRate"], 
+                              d["KillerConsumptionScale"]);
+}
+
+/*
+ * You can also setup the simulation sim using the input json.
+ * For example, you can add new points according to some rule/pattern.
+ * You can throw an exception to stop the simulation from starting.
+ */
+void setup_state(Simulator &sim, const json &input) {
+    auto e = input["entities"];
+    auto p = input["parameters"];
+
+    /* Fill entities */
+    sim.fill(e["TISSUE"], p["InitialTissueDensity"]);
+    sim.fill(e["KILLER"], p["InitialKillerDensity"]);
+    sim.fill(e["SEEKER"], p["InitialSeekerDensity"]);
+    sim.fill(e["DISABLED"], p["InitialDisabledDensity"]);
+    sim.fill(e["TOXIN"], p["InitialToxinDensity"]);
+
+    /* Bacteria dose is within a small circle. */
+    sim.fill_circle(e["BACTERIA"], sim.get_state().center(), Tophat(p["InitialBacteriaDensity"], p["BacteriaEntryRadius"]));
+
+    bool add_halts = true;
+    add_halts = !(input.count("simulator") && input["simulator"].count("no.halting") && input["simulator"]["no.halting"]);
+    if (add_halts) {
+        sim.add_halting_condition(CheckExtinction(static_cast<uint_t>(e["BACTERIA"])));
+        sim.add_halting_condition(CheckExtinction(static_cast<uint_t>(e["TISSUE"])));
+    }
+}
+

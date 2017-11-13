@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+import json
+import argparse
+import copy
+import random
+import util
+import os.path
+import numpy as np
+import combinations
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Generate sensitivity analysis cases')
+    parser.add_argument('-dt', default=0, type=float, help='How often ppsimulator should dump data')
+    parser.add_argument('--cases', '-c', required=True, help='Cases JSON file')
+    parser.add_argument('--model', '-m', required=True, help='Baseline parameters')
+    parser.add_argument('--seed', required=False, help='RNG seed')
+    parser.add_argument('--output', required=True)
+    parser.add_argument('--input', required=False)
+    parser.add_argument('--batch')
+    parser.add_argument('--replicates', '-R', type=int, default=1, help='How many replicates')
+    return parser.parse_args()
+
+args = parse_arguments()
+
+if args.seed is not None:
+    random.seed(args.seed)
+
+def full_path(p):
+    return os.path.abspath(p)
+
+SIM_PATH = full_path("./simulator/toxin")
+model = json.load(open(args.model))
+ranges = json.load(open(args.cases))
+
+base_parameters = model["parameters"]
+
+cases = []
+for c in combinations.generate_cases(ranges):
+    p = copy.deepcopy(model)
+    p["parameters"].update(c)
+    p["case"] = c
+    cases.append(p)
+
+f = sys.stdout
+if args.batch is not None:
+    f = open(args.batch, "w")
+
+for i,c in enumerate(cases,start=1):
+    c["id"] = i
+    path = full_path("{0}/{1}".format(args.output, i))
+    util.new_dir(path)
+
+    # Dump shared parameter file
+    pf = full_path("{0}/model.json".format(path))
+    json.dump(c, open(pf,'w'))
+    
+    # Generate replicate cmds (and unique seeds)
+    seeds = []
+    while len(seeds) < args.replicates:
+        seeds.append(random.randint(0, 2**32-1))
+
+    for seed, r in zip(seeds, range(args.replicates)):
+        of = "{0}/{1}.density".format(path, seed)
+        input_str = ""
+        if args.input is not None:
+            input_str = "--input {0}".format(args.input)
+
+        cmd = "{0} --seed {1} --model {2} --density {3} {4} && gzip {5}\n".format(SIM_PATH, seed, pf, of, input_str, of)
+        f.write(cmd)

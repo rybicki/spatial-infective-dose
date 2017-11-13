@@ -1,0 +1,58 @@
+{
+  "1": {
+    "marker": "o", 
+    "c": [
+      0.9, 
+      0.9,
+      0.9, 
+      1.0
+    ], 
+    "s": 1, 
+    "label": "TISSUE",
+    "zorder" : 1,
+     "edgecolor" : ""
+  }, 
+  "2": {
+    "marker": "o", 
+    "c": "gray",
+    "s": 0.5, 
+    "label": "SEEKER",
+    "omit" : true,
+ "edgecolor" : ""
+  }, 
+  "3": {
+    "marker": "o", 
+    "c": "red",
+    "alpha" : 1,
+    "s": 3, 
+    "label": "BACTERIA",
+    "zorder" : 100,
+ "edgecolor" : ""
+  }, 
+  "4": {
+    "marker": "o", 
+    "c": "green",
+    "s": 2, 
+    "label": "TOXIN",
+    "zorder" : 30,
+ "edgecolor" : ""
+  }, 
+  "5": {
+    "marker": "o", 
+    "c": "#0065ff",
+    "s": 2, 
+    "label": "KILLER",
+    "zorder" : 50,
+    "edgecolor" : "",
+    "circle" : [3, "#75abff"]
+  }, 
+  "0": {
+    "marker": "o", 
+    "c": "black",
+    "s": 0.2, 
+    "edgecolor" : "",
+    "label": "DISABLED",
+    "zorder" : 10,
+ "edgecolor" : "black"
+  }
+}

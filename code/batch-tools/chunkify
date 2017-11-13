@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+"""
+ Permute the contents of a file and split them into several files.
+"""
+import sys
+import random
+import math
+
+if len(sys.argv) < 4:
+    print("Usage: {0} [INPUT_FILE] [CHUNK_PREFIX] [MAX_CHUNKS]".format(sys.argv[0]))
+    sys.exit(0)
+
+INPUT_FILE = sys.argv[1]
+OUTPUT_PREFIX = sys.argv[2]
+CHUNKS = int(sys.argv[3])
+
+lines = open(INPUT_FILE).readlines()
+random.shuffle(lines)
+size = int(math.ceil(len(lines)/float(CHUNKS)))
+
+for c in range(1, CHUNKS+1):
+    chunk_filename = '{0}-{1}.sh'.format(OUTPUT_PREFIX, c)
+    with open(chunk_filename, 'w') as f:
+        for l in lines[(c-1)*size:c*size]:
+            f.write(l)
+
