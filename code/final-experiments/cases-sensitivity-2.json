@@ -1,0 +1,52 @@
+{   
+ "combine" : {
+     "InitialBacteriaDensity" : [
+ 0.0001,
+ 0.00031,
+ 0.001,
+ 0.00316,
+ 0.01,
+ 0.03162,
+ 0.1,
+ 0.31622,
+ 1.0
+],
+     "BacteriaEntryRadius" : [1],
+     "ToxinDiffusionScale" : [1,32]
+ },
+ "alternate" : [
+     { "BacteriaConsumptionRate" : 1.1 },
+     { "BacteriaConsumptionRate" : 0.9 },
+     { "InhibitionRate" : 1.1}, 
+     { "InhibitionRate" : 0.9}, 
+     { "ToxinDeathRate" : 1.1}, 
+     { "ToxinDeathRate" : 0.9}, 
+     { "ToxinSecretionRate" : 1.1}, 
+     { "ToxinSecretionRate" : 0.9}, 
+     { "InitialTissueDensity" : 1.65}, 
+     { "InitialTissueDensity" : 1.35}, 
+     { "InitialSeekerDensity" : 0.55}, 
+     { "InitialSeekerDensity" : 0.45},
+     { "KillerConsumptionRate" : 1.925}, 
+     { "KillerConsumptionRate" : 1.575},
+     { "DisabledRecoveryRate" : 0.0275}, 
+     { "DisabledRecoveryRate" : 0.0225}, 
+     { "KillerToSeekerRate" : 0.22}, 
+     { "KillerToSeekerRate" : 0.18},
+     { "BacteriaConsumptionScale" : 1.1 },
+     { "BacteriaConsumptionScale" : 0.9 },
+     { "BacteriaJumpScale" : 1.1},
+     { "BacteriaJumpScale" : 0.9},
+     { "SeekerJumpScale" : 11 },
+     { "SeekerJumpScale" : 9 },
+     { "KillerJumpScale" : 1.1 },
+     { "KillerJumpScale" : 0.9 },
+     { "InhibitionScale" : 1.1 },
+     { "InhibitionScale" : 0.9 },
+     { "KillerConsumptionScale" : 3.3 },
+     { "KillerConsumptionScale" : 2.7 },
+     { "KillerActivationScale" : 1.1 },
+     { "KillerActivationScale" : 0.9 }
+ ]
+}
+
