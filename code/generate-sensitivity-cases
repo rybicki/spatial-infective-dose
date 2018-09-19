@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+import json
+
+vals = json.load(open(sys.argv[1]))
+offset = float(sys.argv[2])
+
+offset_params = [u'BacteriaJumpScale',
+ u'InitialSeekerDensity',
+ u'ToxinSecretionRate',
+ u'KillerJumpScale',
+ u'KillerActivationScale',
+ u'KillerActivationRate',
+ u'KillerConsumptionRate',
+ u'SeekerJumpScale',
+ u'BacteriaConsumptionRate',
+ u'DisabledRecoveryRate',
+ u'InhibitionRate',
+ u'KillerToSeekerRate',
+ u'InhibitionScale',
+ u'InitialTissueDensity',
+ u'ToxinDeathRate',
+ u'BacteriaConsumptionScale',
+ u'KillerConsumptionScale']
+
+d = {
+ "combine" : {
+     "InitialBacteriaDensity" : [
+     0.0001,
+     0.00031,
+     0.001,
+     0.00316,
+     0.01,
+     0.03162,
+     0.1,
+     0.31622,
+     1.0,
+     3.1622],
+     "BacteriaEntryRadius" : [1],
+     "ToxinDiffusionScale" : [1,32]
+ },
+ "alternate" : [ ]
+}
+
+for p in offset_params:
+    x = vals["parameters"][p]
+    d["alternate"].append({ p :  (1+offset)*x})
+    d["alternate"].append({ p :  (1-offset)*x})
+
+print json.dumps(d, indent=2)

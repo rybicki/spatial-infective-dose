@@ -31,17 +31,17 @@ The simulator also relies on the following libraries, which are included in `sim
 
 The software has been tested on MacOS X 10.12 (Sierra) and on CentOS 6 (GNU/Linux).
 
-# Version 2 (August 2018)
+# Generating the figures
 
 To generate the figures appearing in the paper, just run 
 
-    ./make-final.sh
+    ./make-figures.sh
 
-The datasets used for the final figures in the main text and SI text is located in the files `final-experiments/pooled-data.csv.gz` and `final-experiments/sensitivity-data.csv.gz`.
+The datasets used for the final figures in the main text and SI text is located in the files `final-experiments/pooled-data.csv.gz` and `final-sensitivity/sensitivity-*.csv.gz`.
 
-The additional data has been generated from the parameter specifications given in the JSON files ``final-experiments/*.json` (see below on examples how to regenerate the data).
+Data has been generated from the parameter specifications given in the JSON files `final-experiments/*.json` (see below on examples how to regenerate the data).
 
-## Additional illustration and animations
+# Generating additional illustration and animations
 
 To produce the example animations, first check that the simulator compiles by running
 
@@ -55,6 +55,28 @@ and then run the following:
 This may take some time. If you have gifsicle installed, then you can also compress the animations by running
 
     ./compress-animations.sh
+
+# Minimal example for running the simulations
+
+If you want to play with the simulator, then take a look at the file `example.sh` for a minimal example. Running this generates the following files:
+
+* snapshot data of all point locations (`example-snapshot.txt`)
+* density data (`example-density.txt`)
+* animate the snapshot data (`example.gif`)
+
+If you look into the file `example.sh`, you can see that the simulator is run with the command
+
+    ./simulator/toxin -m experiments/toxin-model.json --time 30 -o example-snapshot.txt -U 50 -d example-density.txt --dt 0.5 --seed 123456789
+
+The command line parameters are
+
+* `-m experiments/toxin-model.json` specifies the model parameter file
+* `-o example-snapshot.txt` determines the output file for the snapshot data
+* `-d example-density.txt` determines the density data (the column names are given in `experiments/toxin-model.json`)
+* `--time 30` determines the simulation time
+* `--U 50` determines the size of the simulation domain
+* `--dt 0.5` gives the frequency of the snapshots (every 0.5 time units in this case)
+* `--seed 123456789` sets the seed for the random number generator
 
 # Version 1 (November 2017)
 
@@ -71,7 +93,7 @@ The source code for generating the simulation data is provided here. However, ru
 * If you want to run all of the simulations again, then follow the instructions in the next subsection.
 * If you want to just generate the plots and animations, then you can skip the next subsection.
 
-### Running the simulations and collecting data
+### Running the simulations 
 
 Run the initialisation script
 
@@ -86,6 +108,8 @@ Once all the commands in the batch file have been executed successfully, it rema
 
     ./collect.sh
 
-The end result is the file `experiments/data.csv.gz`.
+The end result is the file `experiments/data.csv.gz`. Note that the final results dataset `final-experiments/pooled-data.csv.gz` contain some more replicates than what is contained in the `experiments/data.csv.gz`. 
+
+Similarly, you can run the sensitivity analysis by executing `prepare-sensitivity.sh`, the resulting batch files, and then finally `collect-sensitivity.sh`. 
 
 
