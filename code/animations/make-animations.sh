@@ -14,5 +14,5 @@ done
 
 mkdir -p results
 cp output/*/*.gif results/
-./compress-animations.sh
+#./compress-animations.sh
 

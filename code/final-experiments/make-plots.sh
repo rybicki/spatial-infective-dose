@@ -9,7 +9,6 @@ Rscript plot-contours.r 1 $DATA figures/fig-stochasticity-1
 Rscript plot-contours.r 4 $DATA figures/fig-stochasticity-4
 Rscript plot-contours.r 8 $DATA figures/fig-stochasticity-8
 Rscript plot-contours.r 16 $DATA figures/fig-stochasticity-16
-Rscript plot-sensitivity.r $DATA sensitivity-data.csv.gz figures/fig-sensitivity.pdf
 
 for f in figures/*.tiff; do 
     out="figures/cropped/$(basename $f)"

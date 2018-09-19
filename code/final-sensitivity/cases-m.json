@@ -1,0 +1,31 @@
+{
+  "alternate": [
+    {
+      "ToxinDeathRate": 0.01
+    }, 
+    {
+      "ToxinDeathRate": 0.1
+    }
+  ], 
+  "combine": {
+    "InitialBacteriaDensity": [
+      0.0001, 
+      0.00031, 
+      0.001, 
+      0.00316, 
+      0.01, 
+      0.03162, 
+      0.1, 
+      0.31622, 
+      1.0, 
+      3.1622
+    ], 
+    "ToxinDiffusionScale": [
+      1, 
+      32
+    ], 
+    "BacteriaEntryRadius": [
+      1
+    ]
+  }
+}

@@ -1,4 +1,10 @@
+#!/bin/bash
+mkdir -p figures
 cd final-experiments
 ./make-plots.sh
 cd ..
-echo "Final figures are located in './final-experiments/figures'"
+cp ./final-experiments/figures/cropped/* figures/
+cd final-sensitivity
+./make-sensitivity-plots.sh
+cd ..
+cp final-sensitivity/*.pdf figures/

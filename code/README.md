@@ -3,10 +3,10 @@
 This package contains the source code for simulator used in the manuscript:
 
     A model of bacterial toxin-dependent pathogenesis explains infective dose
-    Joel Rybicki, Eva Kisdi and Jani Anttila
+    Joel Rybicki, Eva Kisdi and Jani V. Anttila
     Date: August 2018
 
-Below are the instruction on how to run the simulations and replicate the analysis.
+Below are the instruction on how to run the simulations and replicate the analyses.
 
 ## Requirements and dependencies
 
@@ -30,6 +30,31 @@ The simulator also relies on the following libraries, which are included in `sim
 * [Catch](https://github.com/philsquared/Catch.git)
 
 The software has been tested on MacOS X 10.12 (Sierra) and on CentOS 6 (GNU/Linux).
+
+# Version 2 (August 2018)
+
+To generate the figures appearing in the paper, just run 
+
+    ./make-final.sh
+
+The datasets used for the final figures in the main text and SI text is located in the files `final-experiments/pooled-data.csv.gz` and `final-experiments/sensitivity-data.csv.gz`.
+
+The additional data has been generated from the parameter specifications given in the JSON files ``final-experiments/*.json` (see below on examples how to regenerate the data).
+
+## Additional illustration and animations
+
+To produce the example animations, first check that the simulator compiles by running
+
+    make
+
+and then run the following:
+
+    cd animations
+    ./make-animations.sh
+
+This may take some time. If you have gifsicle installed, then you can also compress the animations by running
+
+    ./compress-animations.sh
 
 # Version 1 (November 2017)
 
@@ -63,29 +88,4 @@ Once all the commands in the batch file have been executed successfully, it rema
 
 The end result is the file `experiments/data.csv.gz`.
 
-## Running the plotting and analysis scripts
 
-To produce the figures and other final data files, run the script
-
-    ./analyse.sh
-
-This will produce the subdirectory `results/` containing the final output files.
-
-## Additional illustration and animations
-
-To produce the example animations, run 
-
-    cd animations
-    ./make-animations.sh
-
-This may take some time.
-
-# Version 2 (August 2018)
-
-After November 2017, the manuscript has been updated to include revised and new figures. In particular, there is now a comprehensive sensitivity analysis. To generate these figures, just run
-
-    ./make-final.sh
-
-The datasets used for the final figures in the main text and SI text is located in the files `final-experiments/pooled-data.csv.gz` and `final-experiments/sensitivity-data.csv.gz`.
-
-The additional data has been generated from the parameter specifications given in the JSON files ``final-experiments/*.json*`
